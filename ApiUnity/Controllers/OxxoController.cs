@@ -7,7 +7,7 @@ using System.Data;
 [Route("[controller]")]
 public class OxxoController : ControllerBase
 {
-    string connectionString = "placeholder";
+    string connectionString = "placeholder"; // Placeholder para evitar problema por secretos
 
     // Devuelve una pregunta con el id
     [Route("GetPreguntaConId/{idPreg}")]
@@ -220,5 +220,22 @@ public class OxxoController : ControllerBase
         cmd.Prepare();
         cmd.ExecuteNonQuery();
         conexion.Close();
-    }    
+    }   
+
+
+    [Route("UpdateLevel/{newLevel}/{idUsuario}")]
+    [HttpPut]
+    public void UpdateLevel(float newLevel, int idUsuario) {
+        MySqlConnection conexion = new MySqlConnection(connectionString);
+        conexion.Open();
+        MySqlCommand cmd = new MySqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "SP_Menu_updateLevel";
+        cmd.Connection = conexion;
+        cmd.Parameters.AddWithValue("@newLevel", newLevel);
+        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+        cmd.Prepare();
+        cmd.ExecuteNonQuery();
+        conexion.Close();
+    }
 }
